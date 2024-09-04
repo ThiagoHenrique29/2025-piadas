@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Piadas.Data;
 using Piadas.Models;
 
@@ -17,6 +18,17 @@ namespace Piadas.Controllers
         public PiadaController(PiadasDbContext context)
         {
             _context = context;
+        }
+        
+        public async Task<IActionResult> Busca()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> ShowSearchResults(String TermoDeBusca)
+        {
+            List<Piada> piadas = await _context.Piada.Where(f => f.Pergunta.Contains(TermoDeBusca)).ToListAsync();
+            return View("index",piadas);
         }
 
         // GET: Piada
